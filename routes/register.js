@@ -6,6 +6,7 @@ var router = express.Router();
 //req request 请求 问
 //res response
 router.get('/', function(req, res, next) {
+  
   let inform = req.query
   let username = inform.newusername
   let password = inform.newpassword
@@ -23,11 +24,22 @@ router.post('/', function(req, res, next) {
   let newUserSQL = 'INSERT INTO USERS (user_id,user_name,user_password,user_create_time) VALUES(1002,' +'"'+ username+'"' + ',' +'"'+ password +'"' +',' +'"' + new Date().format('yyyy-MM-dd hh:mm:ss') + '"' + ')' 
   let conn = db.connection()
   // let result = {}
-  db.insert(conn,newUserSQL,'',function(res){
-    let result = res;
-    console.log(res)
+  db.insert(conn,newUserSQL,'',function(resx){
+    let result = resx;
+    if(resx.insertId ==0 ){
+      result.state="success"
+    }
+    else{
+      result.state= "failed"
+    }
+    // console.log(result)
+    res.send(result);
   })
   db.close(conn)
+
+  
+
 });
+
 
 module.exports = router;
