@@ -3,6 +3,24 @@ let db = {}
 
 
 var arr = [];
+//查询操作
+db.query1 = function (connection, sql, paras, callback){
+let result = connection.query(sql,paras,function(error, results, fields){
+    if (error) {
+        console.log(error)
+    }
+    else{
+        let flag = 0;
+        for (var i = 0; i < results.length; i++) {
+            if(results[i].user_name == paras.username){
+                flag =1;   
+                break; 
+            }
+        }
+        callback(flag)
+    }
+})
+}
 //插入操作，注意使用异步返回查询结果
 db.insert = function (connection, sql, paras, callback) {
     let result = connection.query(sql, paras, function (error, results, fields) {
