@@ -17,25 +17,32 @@ router.get('/', function(req, res, next) {
   res.send(result)
 });
 
-router.post('/', function(req, res, next) {
-  console.log(9999)
+router.post('/check',function(req,res,next){
   let inform = req.body.params;
   let username = inform.newusername;
-  let password = inform.newpassword;
-  console.log(88888)
+  // let password = inform.newpassword;
   let existUserSQL = 'select user_name from users';
   let conn = db.connection()
-  console.log(7777)
   db.query1(conn,existUserSQL,{username:username},function(resx){
-    console.log(345)
     if(resx){
-      res.send("重名了")
+      res.send({
+        state:"failed",
+        message:"用户名重名了"
+      })
     }else{
-      res.send("用户名可以用")
+      res.send({
+        state:"success",
+        message:"用户名可以用"
+      })
     }
   });
   db.close(conn)
 
+})
+
+
+router.post('/', function(req, res, next) {
+  
 
 
   // let newUserSQL = 'INSERT INTO USERS (user_id,user_name,user_password,user_create_time) VALUES(1002,' +'"'+ username+'"' + ',' +'"'+ password +'"' +',' +'"' + new Date().format('yyyy-MM-dd hh:mm:ss') + '"' + ')' 
